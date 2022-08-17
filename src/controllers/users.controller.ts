@@ -1,11 +1,9 @@
 import { Request, Response } from 'express';
-import { CreateUserDto, UserDto } from '../common/Dtos/user.dto';
 import { User } from '../models/user.model';
 import { IUserResponse } from '../common/interfaces/user-response.interface';
 import { IResponseMessage } from '../common/interfaces/response-message.interface';
 import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
-import axios from 'axios';
 
 //Register new user
 export const postCreateUser = async (
@@ -25,7 +23,7 @@ export const postCreateUser = async (
       },
     };
 
-    res.status(404).json(err);
+    res.status(401).json(err);
     return err;
   }
 
@@ -152,8 +150,6 @@ export const postLoginUser = async (
     return userResponse;
   }
 
-  existingUser.lastLogin = new Date();
-
   await existingUser.save();
 
   const token = await jwt.sign(
@@ -169,4 +165,47 @@ export const postLoginUser = async (
 
   const loggedUser: IUserResponse = { user: existingUser };
   return loggedUser;
+};
+
+//Deleting a user's account from the platform. Usually we do soft deletion but since this is an assessment, I will do actual deleting
+export const postDeleteUser = async (
+  req: Request,
+  res: Response
+): Promise<string> => {
+  const { user, email } = req.body;
+
+  if (!email) {
+    res.status(401).json({ error: 'Email is required.' });
+
+    return 'Email is required';
+  }
+
+  if (!user) {
+    res.status(401).json({ error: 'You are not authorized' });
+
+    return 'You are not authorized';
+  }
+
+  const existingUser = await User.findOne({ email });
+
+  if (!existingUser) {
+    res.status(404).json({ error: 'User not found' });
+
+    return 'User not found';
+  }
+
+  if (String(existingUser._id) !== String(user.userId)) {
+    console.log(existingUser._id);
+
+    console.log(user.userId);
+    res.status(401).json({ error: "You can't perform this operation" });
+
+    return 'You can perform this operation';
+  }
+
+  await User.deleteOne({ email });
+
+  res.status(200).json({ msg: 'Account deleted' });
+
+  return 'Account deleted';
 };

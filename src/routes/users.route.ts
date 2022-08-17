@@ -2,7 +2,11 @@ import { Router, Response, Request } from 'express';
 import auth from '../middleware/auth';
 const userRouter = Router();
 
-import { postCreateUser, postLoginUser } from '../controllers/users.controller';
+import {
+  postCreateUser,
+  postLoginUser,
+  postDeleteUser,
+} from '../controllers/users.controller';
 
 /**
  * @swagger
@@ -14,23 +18,16 @@ import { postCreateUser, postLoginUser } from '../controllers/users.controller';
  *       - application/json
  *     parameters:
  *       - name: email
- *         description: Email to use for login.
- *         in: formData
- *         required: true
- *         type: string
- *       - name: username
- *         description: Username to use for login.
- *         in: formData
+ *         description: Email to use for  account creation.
  *         required: true
  *         type: string
  *       - name: password
  *         description: User's password.
- *         in: formData
  *         required: true
  *         type: string
  *     responses:
  *       200:
- *         description: login
+ *         description: signup
  *       404:
  *         description: user not found
  *       400:
@@ -71,5 +68,28 @@ userRouter.post('/api/user/signup', postCreateUser);
  *         description: Invalid login details!
  */
 userRouter.post('/api/user/signin', postLoginUser);
+
+/**
+ * @swagger
+ *
+ * /api/user/delete-account:
+ *   post:
+ *     description: post request to delete an existing user
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: email
+ *         description: Email to use for deleting account.
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: account deleted
+ *       404:
+ *         description: user not found
+ *       400:
+ *         description: Invalid login details!
+ */
+userRouter.delete('/api/user/delete-account', auth, postDeleteUser);
 
 export default userRouter;
