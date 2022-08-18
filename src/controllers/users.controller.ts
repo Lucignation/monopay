@@ -89,8 +89,7 @@ export const postCreateUser = async (
 
   const token = await jwt.sign(
     { userId: user._id, email },
-    // process.env.TOKEN_KEY,
-    'youaretoofaithfultofailme',
+    process.env.TOKEN_KEY,
     {
       expiresIn: '2h',
     }
@@ -152,8 +151,7 @@ export const postLoginUser = async (
 
   const token = await jwt.sign(
     { userId: existingUser._id, email },
-    // process.env.TOKEN_KEY,
-    'youaretoofaithfultofailme',
+    process.env.TOKEN_KEY,
     {
       expiresIn: '2h',
     }
