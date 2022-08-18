@@ -3,6 +3,7 @@ import { Account } from '../models/account.model';
 import { User } from '../models/user.model';
 import { IResponseMessage } from '../common/interfaces/response-message.interface';
 import { Transaction } from '../models/transaction.model';
+const cron = require('node-cron');
 
 export const postLinkAccount = async (
   req: Request,
@@ -162,5 +163,10 @@ export const getAllUserTransactions = async (
   const allTransactions = await Transaction.find({ userId: user.userId });
   res.status(200).json({ msg: allTransactions });
 
+  //fetch new transactions after every 3 hours
+  cron.schedule('* * */3 * *', async () => {
+    const allTransactions = await Transaction.find({ userId: user.userId });
+    res.status(200).json({ msg: allTransactions });
+  });
   return 'well fetched';
 };
