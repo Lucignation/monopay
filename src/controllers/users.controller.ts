@@ -11,9 +11,6 @@ export const postCreateUser = async (
   res: Response
 ): Promise<IUserResponse> => {
   const { firstName, lastName, email, password } = req.body;
-  console.log(req);
-  console.log(firstName);
-  console.log(email);
 
   if (!email) {
     const err: IResponseMessage = {
@@ -29,8 +26,10 @@ export const postCreateUser = async (
 
   const emailToLowerCase = email.toLowerCase(); //turns the email to lower case
 
+  console.log(emailToLowerCase);
+
   //   const findUser: CreateUserDto = await User.findOne({ username });
-  const existingUser: unknown = await User.findOne({ emailToLowerCase });
+  const existingUser: unknown = await User.findOne({ email });
 
   if (existingUser) {
     const userResponse: IUserResponse = {
@@ -91,7 +90,8 @@ export const postCreateUser = async (
 
   const token = await jwt.sign(
     { userId: user._id, email },
-    process.env.TOKEN_KEY,
+    // process.env.TOKEN_KEY,
+    'youaretoofaithfultofailme',
     {
       expiresIn: '2h',
     }
@@ -154,7 +154,8 @@ export const postLoginUser = async (
 
   const token = await jwt.sign(
     { userId: existingUser._id, email },
-    process.env.TOKEN_KEY,
+    // process.env.TOKEN_KEY,
+    'youaretoofaithfultofailme',
     {
       expiresIn: '2h',
     }
