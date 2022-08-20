@@ -90,7 +90,8 @@ export const postCreateUser = async (
 
   const token = await jwt.sign(
     { userId: user._id, email },
-    process.env.TOKEN_KEY,
+    // process.env.TOKEN_KEY,
+    'youaretoofaithfultofailme',
     {
       expiresIn: '2h',
     }
@@ -123,7 +124,7 @@ export const postLoginUser = async (
     return err;
   }
   const emailToLowerCase = email.toLowerCase(); //turns email to lower case
-  const existingUser = await User.findOne({ emailToLowerCase });
+  const existingUser = await User.findOne({ email: emailToLowerCase });
   if (!existingUser) {
     const userResponse: IUserResponse = {
       error: {
@@ -153,7 +154,8 @@ export const postLoginUser = async (
 
   const token = await jwt.sign(
     { userId: existingUser._id, email },
-    process.env.TOKEN_KEY,
+    // process.env.TOKEN_KEY,
+    'youaretoofaithfultofailme',
     {
       expiresIn: '2h',
     }
