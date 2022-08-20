@@ -29,7 +29,7 @@ export const postCreateUser = async (
   console.log(emailToLowerCase);
 
   //   const findUser: CreateUserDto = await User.findOne({ username });
-  const existingUser: unknown = await User.findOne({ email });
+  const existingUser: unknown = await User.findOne({ emailToLowerCase });
 
   if (existingUser) {
     const userResponse: IUserResponse = {
@@ -90,7 +90,8 @@ export const postCreateUser = async (
 
   const token = await jwt.sign(
     { userId: user._id, email },
-    process.env.TOKEN_KEY,
+    // process.env.TOKEN_KEY,
+    'youaretoofaithfultofailme',
     {
       expiresIn: '2h',
     }
@@ -153,7 +154,8 @@ export const postLoginUser = async (
 
   const token = await jwt.sign(
     { userId: existingUser._id, email },
-    process.env.TOKEN_KEY,
+    // process.env.TOKEN_KEY,
+    'youaretoofaithfultofailme',
     {
       expiresIn: '2h',
     }
