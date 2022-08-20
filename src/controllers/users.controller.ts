@@ -29,7 +29,7 @@ export const postCreateUser = async (
   console.log(emailToLowerCase);
 
   //   const findUser: CreateUserDto = await User.findOne({ username });
-  const existingUser: unknown = await User.findOne({ emailToLowerCase });
+  const existingUser: unknown = await User.findOne({ email: emailToLowerCase });
 
   if (existingUser) {
     const userResponse: IUserResponse = {
