@@ -2,3 +2,5 @@
 /build
 
 nodemon.json
+
+.env.example
