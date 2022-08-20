@@ -6,7 +6,6 @@ const connectDB = async () => {
 
   try {
     await mongoose.connect(MONGODB_URI);
-    // await mongoose.connect(LOCAL_DB);
     console.log('MongoDB connect');
   } catch (error) {
     console.log(error);
